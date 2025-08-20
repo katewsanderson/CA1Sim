@@ -2229,6 +2229,8 @@ class CA1_Pyr(HocCell):
                     self.insert_spines_every(node, densities['tuft']['parent'])
         self._reinit_mech(self.spine)
 
+
+
     def insert_spines_every(self, node, density):
         """
         Given a mean spine density in /um, insert spines in the node at the specified density.
@@ -2240,8 +2242,9 @@ class CA1_Pyr(HocCell):
         interval = self.random.exponential(beta)
         while interval < L:
             self.insert_spine(node, interval/L)
-            interval += self.random.exponential(beta)
+            interval +=  self.random.exponential(beta)
 
+    
     def insert_spine(self, node, parent_loc, child_loc=0):
         """
         Spines consist of two hoc sections: a cylindrical spine head and a cylindrical spine neck.
@@ -2250,16 +2253,24 @@ class CA1_Pyr(HocCell):
         :param child_loc: int
         """
         neck = self.make_section('spine_neck')
-        neck.connect(node, parent_loc, child_loc)
+        neck.connect(node, parent_loc, child_loc) # added .sec to node
+
         neck.sec.L = 1.58
         neck.sec.diam = 0.077
         self._init_cable(neck)
+        neck.sec.Ra = 147.36  # setting axial resistance 
         head = self.make_section('spine_head')
+        head.loc = parent_loc
         head.connect(neck)
-        node.spines.append(head)
         head.sec.L = 0.5  # open cylinder, matches surface area of sphere with diam = 0.5
         head.sec.diam = 0.5
         self._init_cable(head)
+        
+        head.neck = neck # new
+        head.loc = parent_loc  # new
+        node.spines.append(head)
+
+
 
     def insert_inhibitory_synapses_in_subset(self, sec_type_list=None):
         """

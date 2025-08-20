@@ -15,11 +15,11 @@ stats = btmorph.BTStats(swc_tree)
 
 # get the total length
 total_length = stats.total_length()
-print 'total_length = %f' % total_length
+print('total_length = %f' % total_length)
 
 # get the max degree
 max_degree = stats.degree_of_node(swc_tree.get_root())
-print 'max_degree = %f' % max_degree
+print('max_degree = %f' % max_degree)
 
 #generate dendrogram
 btmorph.plot_dendrogram(morph_dir+cell_path)

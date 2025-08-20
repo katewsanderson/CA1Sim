@@ -73,11 +73,11 @@ def offset_vm():
         if v_rest < v_init - 0.25:
             i_holding += 0.005
             if sim.verbose:
-                print 'increasing i_holding to %.3f' % (i_holding)
+                print('increasing i_holding to %.3f' % (i_holding))
         elif v_rest > v_init + 0.25:
             i_holding -= 0.005
             if sim.verbose:
-                print 'decreasing i_holding to %.3f' % (i_holding)
+                print('decreasing i_holding to %.3f' % (i_holding))
         else:
             offset = False
     sim.tstop = duration
@@ -127,11 +127,11 @@ def stim_sweep(f, vm_amp_targets=[-5., 15., 40.], step_sizes=[0.01, 0.01, 0.01])
                 sim.parameters['amp'] = amp * direction
                 sim.parameters['plateau'] = plateau
                 sim.export_to_file(f, simiter)
-                print 'Simulation took %i s with amp %.2f' % (time.time()-start_time, amp*direction)
+                print('Simulation took %i s with amp %.2f' % (time.time()-start_time, amp*direction))
                 matched = True
             else:
                 amp += step_sizes[i]
-                print 'Changing amp to %.2f' % (amp*direction)
+                print('Changing amp to %.2f' % (amp*direction))
         simiter += 1
 
 

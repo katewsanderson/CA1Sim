@@ -283,8 +283,8 @@ cell = SingleCompartment()
 syn_count = read_from_pkl(data_dir+'062216 syn count.pkl')
 all_exc_syns = syn_count['exc']
 all_inh_syns = syn_count['inh']
-fraction_exc_syns = {group: float(all_exc_syns[group]) / float(np.sum(all_exc_syns.values())) for group in all_exc_syns}
-fraction_inh_syns = {group: float(all_inh_syns[group]) / float(np.sum(all_inh_syns.values())) for group in all_inh_syns}
+fraction_exc_syns = {group: float(all_exc_syns[group]) / float(np.sum(list(all_exc_syns.values()))) for group in all_exc_syns}
+fraction_inh_syns = {group: float(all_inh_syns[group]) / float(np.sum(list(all_inh_syns.values()))) for group in all_inh_syns}
 stim_exc_syns = {'CA3': [], 'ECIII': []}
 stim_inh_syns = {'perisomatic': [], 'axo-axonic': [], 'apical dendritic': [], 'distal apical dendritic': [],
                  'tuft feedforward': [], 'tuft feedback': []}
@@ -356,10 +356,10 @@ for group in stim_exc_syns:
     cos_mod_weight[group][right:] = 1.
     peak_locs[group] = list(peak_locs[group])
     cos_mod_weight[group] = list(cos_mod_weight[group])
-    indexes = range(len(peak_locs[group]))
+    indexes = list(range(len(peak_locs[group])))
     local_random.shuffle(indexes)
-    peak_locs[group] = map(peak_locs[group].__getitem__, indexes)
-    cos_mod_weight[group] = map(cos_mod_weight[group].__getitem__, indexes)
+    peak_locs[group] = list(map(peak_locs[group].__getitem__, indexes))
+    cos_mod_weight[group] = list(map(cos_mod_weight[group].__getitem__, indexes))
     for i, syn in enumerate(stim_exc_syns[group]):
         syn.netcon('AMPA_KIN').weight[0] = cos_mod_weight[group][i]
 

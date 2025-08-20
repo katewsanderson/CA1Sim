@@ -47,7 +47,7 @@ def offset_vm(sec_type, vm_target=None):
         i_holding[sec_type] += 0.01
         while offset:
             if sim.verbose:
-                print 'increasing i_holding to %.3f (%s)' % (i_holding[sec_type], sec_type)
+                print('increasing i_holding to %.3f (%s)' % (i_holding[sec_type], sec_type))
             sim.modify_stim(1, amp=i_holding[sec_type])
             sim.run(vm_target)
             vm = np.interp(t, sim.tvec, rec)
@@ -60,7 +60,7 @@ def offset_vm(sec_type, vm_target=None):
         i_holding[sec_type] -= 0.01
         while offset:
             if sim.verbose:
-                print 'decreasing i_holding to %.3f (%s)' % (i_holding[sec_type], sec_type)
+                print('decreasing i_holding to %.3f (%s)' % (i_holding[sec_type], sec_type))
             sim.modify_stim(1, amp=i_holding[sec_type])
             sim.run(vm_target)
             vm = np.interp(t, sim.tvec, rec)
@@ -82,7 +82,7 @@ def find_spike_threshold():
     while not spike:
         sim.modify_stim(0, amp=amp)
         if sim.verbose:
-            print 'increasing amp to %.3f' % amp
+            print('increasing amp to %.3f' % amp)
         sim.run(v_init)
         vm = np.interp(t, sim.tvec, sim.rec_list[0]['vec'])
         if np.any(vm[int(equilibrate/dt):int((equilibrate+50.)/dt)] > -30.):

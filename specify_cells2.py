@@ -1,5 +1,5 @@
 __author__ = 'Aaron D. Milstein'
-import btmorph  # must be found in system $PYTHONPATH
+# import btmorph  # must be found in system $PYTHONPATH
 from function_lib import *
 from neuron import h  # must be found in system $PYTHONPATH
 # Includes modification of an early version of SWC_neuron.py by Daniele Linaro.
@@ -190,7 +190,7 @@ class HocCell(object):
                 neighbor_radius_list.extend([grandchild.content['p3d'].radius for grandchild in child.children])
                 if np.all(neighbor_radius_list > threshold):
                     child.content['p3d'].radius = np.mean(neighbor_radius_list)
-                    # print 'Replacing diam at point', child.index
+                    # print('Replacing diam at point', child.index)
             self.clean_swc_diams(child)
 
     def load_morphology_from_hoc(self, existing_hoc_cell):
@@ -228,7 +228,7 @@ class HocCell(object):
         :param parent_node: :class:'SHocNode'
         :param child_list: list of :class:'h.Section'
         """
-        print "Under construction: import morphology from hoc"
+        print("Under construction: import morphology from hoc")
         for child in child_list:
             L = child.L
             diam = child.diam
@@ -303,8 +303,8 @@ class HocCell(object):
                     new_node.sec.diam = diam
                     self._init_cable(new_node)
                     if verbose:
-                        print '{} [nseg: {}, diam: {}, length: {}, parent: {}]'.format(new_node.name, new_node.sec.nseg,
-                                                                                    diam, length, new_node.parent.name)
+                        print ('{} [nseg: {}, diam: {}, length: {}, parent: {}]'.format(new_node.name, new_node.sec.nseg,
+                                                                                    diam, length, new_node.parent.name))
                 else:
                     diams.append(diam)
                     if len(diams) > 2:
@@ -314,27 +314,27 @@ class HocCell(object):
                             new_node.set_diam_bounds(mean+stdev*2., mean-stdev*2.)
                             self._init_cable(new_node)
                             if verbose:
-                                print '{} [nseg: {}, diam: ({}:{}), length: {}, parent: {}]'.format(new_node.name,
-                                                new_node.sec.nseg, mean+stdev, mean-stdev, length, new_node.parent.name)
+                                print('{} [nseg: {}, diam: ({}:{}), length: {}, parent: {}]'.format(new_node.name,
+                                                new_node.sec.nseg, mean+stdev, mean-stdev, length, new_node.parent.name))
                         else:
                             new_node.sec.diam = mean
                             self._init_cable(new_node)
                             if verbose:
-                                print '{} [nseg: {}, diam: {}, length: {}, parent: {}]'.format(new_node.name,
-                                                                new_node.sec.nseg, mean, length, new_node.parent.name)
+                                print('{} [nseg: {}, diam: {}, length: {}, parent: {}]'.format(new_node.name,
+                                                                new_node.sec.nseg, mean, length, new_node.parent.name))
                     elif abs(diams[0]-diams[1]) > 0.5:
                         new_node.set_diam_bounds(diams[0], diams[1])
                         self._init_cable(new_node)
                         if verbose:
-                            print '{} [diam: ({}:{}), length: {}, parent: {}]'.format(new_node.name, new_node.sec.nseg,
-                                                                    diams[0], diams[1], length, new_node.parent.name)
+                            print('{} [diam: ({}:{}), length: {}, parent: {}]'.format(new_node.name, new_node.sec.nseg,
+                                                                    diams[0], diams[1], length, new_node.parent.name))
                     else:
                         mean = np.mean(diams)
                         new_node.sec.diam = mean
                         self._init_cable(new_node)
                         if verbose:
-                            print '{} [nseg: {}, diam: {}, length: {}, parent: {}]'.format(new_node.name,
-                                                                new_node.sec.nseg, mean, length, new_node.parent.name)
+                            print ('{} [nseg: {}, diam: {}, length: {}, parent: {}]'.format(new_node.name,
+                                                                new_node.sec.nseg, mean, length, new_node.parent.name))
                 # Follow all branches from this fork
                 for child in raw_node.children:
                     self.make_skeleton(child, new_node)
@@ -373,8 +373,8 @@ class HocCell(object):
             if current_node is None:
                 if 'section' in raw_node.content and len(self._node_dict[sec_type]) != raw_node.content['section'] and \
                         verbose:
-                    print 'HocCell section index %i does not match neurotree section index %i' % \
-                          (len(self._node_dict[sec_type]), raw_node.content['section'])
+                    print ('HocCell section index %i does not match neurotree section index %i' % \
+                          (len(self._node_dict[sec_type]), raw_node.content['section']))
                 current_node = self.make_section(sec_type)
                 current_node.sec.push()
                 # some SWC files contain duplicate xyz points at branch points
@@ -396,17 +396,17 @@ class HocCell(object):
                     (leaves == 1 and not raw_node.children[0].content['p3d'].type == swc_type) or
                     (leaves == 1 and np.all(swc.xyz == raw_node.children[0].content['p3d'].xyz))):
                 if (leaves ==1 and np.all(swc.xyz == raw_node.children[0].content['p3d'].xyz) and verbose):
-                    print 'Encountered duplicate point in ', current_node.name
+                    print('Encountered duplicate point in ', current_node.name)
                 if (self.tree.is_root(parent)) and (sec_type == 'basal'):
                     parent = self.soma[1]
                 current_node.connect(parent)
                 self._init_cable(current_node)
                 if verbose:
-                    print '{} [nseg: {}, diam: {}, length: {}, parent: {}]'.format(current_node.name,
+                    print ('{} [nseg: {}, diam: {}, length: {}, parent: {}]'.format(current_node.name,
                                                                                    current_node.sec.nseg,
                                                                                    current_node.sec.diam,
                                                                                    current_node.sec.L,
-                                                                                   current_node.parent.name)
+                                                                                   current_node.parent.name))
                 # Follow all branches from this fork
                 for child in raw_node.children:
                     self.make_3d(child, current_node)
@@ -991,11 +991,11 @@ class HocCell(object):
                 return getattr(getattr(donor.sec(loc), mech_name), param_name)
         except (AttributeError, NameError, KeyError):
             if syn_type is None:
-                print 'Exception: Mechanism: {} parameter: {} cannot be inherited from sec_type: {}'.format(mech_name,
-                                                                                                param_name, donor.type)
+                print('Exception: Mechanism: {} parameter: {} cannot be inherited from sec_type: {}'.format(mech_name,
+                                                                                                param_name, donor.type))
             else:
-                print 'Exception: Problem inheriting synaptic mechanism: {} parameter {} from sec_type: {}'.format(
-                                                                                    syn_type, param_name, donor.type)
+                print('Exception: Problem inheriting synaptic mechanism: {} parameter {} from sec_type: {}'.format(
+                                                                                    syn_type, param_name, donor.type))
             raise KeyError
 
     def _get_spatial_res(self, node):
@@ -1015,10 +1015,10 @@ class HocCell(object):
             if rules['origin'] in sec_types:  # if this sec_type also inherits the value, continue following the path
                 return self._get_spatial_res(self._get_node_along_path_to_root(node, rules['origin']))
             else:
-                print 'Exception: Spatial resolution cannot be inherited from sec_type: {}'.format(rules['origin'])
+                print ('Exception: Spatial resolution cannot be inherited from sec_type: {}'.format(rules['origin']))
                 raise KeyError
         else:
-            print 'Exception: Cannot set spatial resolution without a specified origin or value'
+            print ('Exception: Cannot set spatial resolution without a specified origin or value')
             raise KeyError
 
 
@@ -1125,7 +1125,7 @@ class HocCell(object):
                 if param_name in ['Ra', 'cm', 'spatial_res']:
                     self._reinit_mech(nodes, reset_cable=1)
                 else:
-                    print 'Exception: Unknown cable property: {}'.format(param_name)
+                    print('Exception: Unknown cable property: {}'.format(param_name))
                     raise KeyError
             else:
                 for node in nodes:
@@ -1133,10 +1133,10 @@ class HocCell(object):
                         self._modify_mechanism(node, mech_name, mech_content)
                     except (AttributeError, NameError, ValueError, KeyError):
                         if not param_name is None:
-                            print 'Exception: Problem modifying mechanism: {} parameter: {}'.format(mech_name,
-                                                                                                    param_name)
+                            print('Exception: Problem modifying mechanism: {} parameter: {}'.format(mech_name,
+                                                                                                    param_name))
                         else:
-                            print 'Exception: Problem inserting mechanism: {}'.format(mech_name)
+                            print('Exception: Problem inserting mechanism: {}'.format(mech_name))
                         raise KeyError
         except KeyError:
             if backup_content is None:
@@ -1232,10 +1232,10 @@ class HocCell(object):
                     self._modify_mechanism(node, 'synapse', {syn_type: mech_content})
                 except (AttributeError, NameError, ValueError, KeyError):
                     if not param_name is None:
-                        print 'Exception: Problem modifying synaptic mechanism: {} parameter: {}'.format(syn_type,
-                                                                                                param_name)
+                        print('Exception: Problem modifying synaptic mechanism: {} parameter: {}'.format(syn_type,
+                                                                                                param_name))
                     else:
-                        print 'Exception: Problem inserting synaptic mechanism: {}'.format(syn_type)
+                        print('Exception: Problem inserting synaptic mechanism: {}'.format(syn_type))
                     raise KeyError
         except KeyError:
             if backup_content is None:
@@ -1255,7 +1255,7 @@ class HocCell(object):
         if mech_filename is None:
             mech_filename = 'mech_dict_'+datetime.datetime.today().strftime('%m%d%Y%H%M')
         write_to_pkl(data_dir+mech_filename+'.pkl', self.mech_dict)
-        print "Exported mechanism dictionary to "+mech_filename+'.pkl'
+        print("Exported mechanism dictionary to "+mech_filename+'.pkl')
 
     def get_node_by_distance_to_soma(self, distance, sec_type):
         """
@@ -2140,7 +2140,7 @@ class QuickSim(object):
             h.fcurrent()
         h.run()
         if self.verbose:
-            print 'Simulation runtime: ', time.time()-start_time, ' sec'
+            print('Simulation runtime: ', time.time()-start_time, ' sec')
 
     def append_rec(self, cell, node, loc=None, param='_ref_v', object=None, ylabel='Vm', units='mV', description=None):
         """
@@ -2346,7 +2346,7 @@ class QuickSim(object):
             if 'description' in rec:
                 rec_out.attrs['description'] = rec['description']
         if self.verbose:
-            print 'Simulation ', simiter, ': exporting took: ', time.time()-start_time, ' s'
+            print('Simulation ', simiter, ': exporting took: ', time.time()-start_time, ' s')
 
     def get_cvode_state(self):
         """
