@@ -2,7 +2,8 @@ from neuron import h
 import numpy as np
 
 def count_spines(cell):
-    ### Return a dict of spine counts (necks and heads) per section.
+    
+    # returns a dictionary of spine counts per section
     
     spine_necks = [s for s in h.allsec() if 'spine_neck' in s.name()]
     spine_heads = [s for s in h.allsec() if 'spine_head' in s.name()]
@@ -14,6 +15,7 @@ def count_spines(cell):
         neck_count = 0
         head_count = 0
 
+        # necks and heads should always be the same! just another check on my deletion/removal
         # count necks
         for neck in spine_necks:
             parent_seg = neck.parentseg()
@@ -39,7 +41,9 @@ def count_spines(cell):
 
 
 def region_density(cell):
-    ### Return summary spine densities per region.
+    
+    # returns summary spine densities per region
+    
     regions = {
         "basal": cell.basal,
         "trunk": cell.trunk,
@@ -69,17 +73,12 @@ def region_density(cell):
 
 
 def print_summary(stats):
+    
+    # just a quick printing block
+    
     for region, values in stats.items():
         print(f"{region.capitalize():<8} | "
               f"Spines: {values['spines']:>4} | "
               f"Length: {values['length (µm)']:.1f} µm | "
               f"Density: {values['spines/µm']:.3f} spines/µm")
         
-
-def detect_spike_times(v, t, threshold = -25):
-    spike_times = []
-    above = v > threshold
-    for i in range(1, len(v)):
-        if above[i] and not above[i-1]:
-            spike_times.append(t[i])
-    return spike_times

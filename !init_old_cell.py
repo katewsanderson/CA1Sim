@@ -35,10 +35,8 @@ gnaSr = 0.03 # in other dendrites
 def insert_soma_channels(cell):
     for node in cell.soma:
         sec = node.sec
-        sec.insert('nax') # fast sodium channel        
-        for seg in sec:
-            seg.gbar_nax = gnaSoma
-
+        sec.insert('nax') # fast sodium channel
+        sec.gbar_nax = gnaSoma # setting the max conductance for Na
         
         sec.insert('kdr') # delayed rectifier K channel
         sec.gkdrbar_kdr = gkdr # setting the max conductance for kdr
@@ -72,9 +70,6 @@ def insert_basal_apical_channels(cell, seclist):
                 seg.cm = spinefactor * Cm # increased capacitance
         # inserting the active channels
         sec.insert('nax')
-        for seg in sec:
-            seg.gbar_nax = gnaSr   # dendritic sodium conductance
-
         sec.insert('kdr')
         sec.gkdrbar_kdr = gkdr
         sec.insert('kap')
@@ -93,18 +88,15 @@ def insert_tuft_channels(cell, seclist, gbar_value):
     for node in seclist:
         sec = node.sec
         sec.insert('nax')
-        for seg in sec:
-            seg.gbar_nax = gbar_value
-
+        sec.gbar_nax = gbar_value
 
 def finalize_soma(cell):
     # Set zero distance origin at soma middle (segment)
     h.distance(0, cell.soma[0].sec(0.5))  # pass the segment, no need to call .sec again
     
     for node in cell.soma:
-        for seg in node.sec:
-            seg.gbar_nax = gnaSoma
-
+        sec = node.sec
+        sec.gbar_nax = gnaSoma
 
 #  MAIN INITIALIZER 
 def init_cell(v_init=-70, celsius=35):
@@ -127,3 +119,4 @@ def init_cell(v_init=-70, celsius=35):
     h.dt = 0.1
 
     return cell
+
