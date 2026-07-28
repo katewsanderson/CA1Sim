@@ -1,7 +1,7 @@
 TITLE Ca channels (T, N, L-type) for CA1 Pyramidal Neurons
 
 NEURON {
-	SUFFIX Ca
+	SUFFIX Ca3
 	USEION ca READ eca WRITE ica
 	RANGE gtcabar, gncabar, glcabar, gtca, gnca, glca
 	RANGE ainf, taua, binf, taub, gbar, gcamult, i
